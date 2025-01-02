@@ -1,5 +1,5 @@
 """Main system training function and helpers."""
-
+import re
 import copy
 import json
 import os
@@ -836,7 +836,7 @@ def main(config_dict=None, config_override={}):
     if load_state and not config_dict.get('_ray_tune_config', False):
         log_directory = to.load(load_state)['log_directory']
     process_id = config.parallel_process_id()
-
+    log_directory = re.sub(r'[<>:"/\\|?*]', '_', log_directory) # I added this line
     with SummaryWriter(log_dir=log_directory) as tracker:
         # Include inside the Tensorboard context so the necessary directories
         # are created

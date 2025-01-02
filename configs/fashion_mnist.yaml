@@ -19,7 +19,7 @@ config_dicts :
 network_weight_steps: 10
 hyperparameter_steps: 1000
 validation_proportion: 0.166667  # 10000/60000
-device: cuda
+device: cpu
 batch_size: 50
 transformed_hyperparameters:
   lr: 10^

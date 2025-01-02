@@ -1,0 +1,6 @@
+envOWUH/
+__pycache__/
+*.log
+*.pyc
+*.pyo
+*.swp

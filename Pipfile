@@ -13,7 +13,7 @@ pyyaml = "*"
 matplotlib = "*"
 scipy = "*"
 bayesian-optimization = "*"
-ray[tune] = "*"
+"ray[tune]" = "*"
 gputil = "*"
 
 [dev-packages]

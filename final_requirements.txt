@@ -44,7 +44,7 @@ gpustat==1.0.0b1
 GPUtil==1.4.0
 graphviz==0.16
 grpcio==1.37.0
-gym==0.21.0
+# gym==0.21.0 (there was an issue, I had to install it manually the new version)
 h11==0.12.0
 higher==0.2.1
 hiredis==2.0.0
@@ -139,10 +139,10 @@ tensorboardX==2.4
 terminado==0.10.1
 testpath==0.5.0
 threadpoolctl==2.2.0
-tifffile==2021.11.2
-tokenize-rt==2.2.0
-torch==1.8.1+cu101
-torchvision==0.9.1+cu101
+# tifffile==2021.11.2 (pip install tifffile==2021.4.8)
+# tokenize-rt==2.2.0 (2.2.0 need python 3.10 or higher. But it is not available for python 3.9. So I had to install it manually 1.0.0)
+# torch==1.8.1+cu101 (pip install torch==1.8.1+cpu torchvision==0.9.1+cpu -f https://download.pytorch.org/whl/torch_stable.html)
+# torchvision==0.9.1+cu101 (pip install torchvision==0.9.1+cpu -f https://download.pytorch.org/whl/torch_stable.html)
 torchviz==0.0.2
 tornado==6.1
 tqdm==4.61.1
