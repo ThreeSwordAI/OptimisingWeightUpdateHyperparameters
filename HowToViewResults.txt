@@ -1,2 +1,10 @@
 tensorboard --logdir=./runs
 http://localhost:6006/
+
+For MacBook:
+
+python3 -m venv env
+source env/bin/activate
+pip3 install tensorboard
+tensorboard --logdir=./runs
+http://localhost:6006/
