@@ -402,7 +402,8 @@ def fix_missing_hyperparameter_clipping(root_directory):
 
 if __name__ == '__main__':
     # Python <=3.8 uses a relative __file__; force it to be absolute
-    __file__ = os.path.abspath(__file__)
+    #__file__ = os.path.abspath(__file__)
+    __file__ = os.path.abspath("parallel_exec.py")
     # run_parallel(num_workers=8,
     #              num_repetitions=200,
     #              override_generator=natural_sgd_generator,
