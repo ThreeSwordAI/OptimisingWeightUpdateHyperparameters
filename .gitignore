@@ -1,6 +1,7 @@
 envOWUH/
 envOWHP/
 __pycache__/
+ray_tune/
 *.log
 *.pyc
 *.pyo

@@ -9,6 +9,7 @@ import pathlib
 import sys
 import tqdm
 import ray.tune as tune
+import ray #I added
 
 import bayesopt
 import config
@@ -178,7 +179,8 @@ def ray_tune_run_pbt(num_workers,
         # stop=lambda trial_id, result: not np.isfinite(result['validation_loss']),
         checkpoint_score_attr='min-validation_loss',
         num_samples=num_repetitions,
-        resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
+        #resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
+        resources_per_trial={'cpu': 1, 'gpu': 1}, #I added
         local_dir=local_dir,
         config={'master_config': master_config,
                 'num_workers': num_workers},
@@ -209,7 +211,8 @@ def ray_tune_run_asha(num_workers,
         mode='min',
         stop=lambda trial_id, result: not np.isfinite(result['validation_loss']),
         num_samples=num_repetitions,
-        resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
+        #resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
+        resources_per_trial={'cpu': 1, 'gpu': 1}, #I added
         local_dir=local_dir,
         config={'master_config': master_config,
                 'num_workers': num_workers,
@@ -224,6 +227,7 @@ def ray_tune_trainable(config, checkpoint_dir=None):
     """Trainable function to start training one configuration under Ray Tune.
     """
     # Undo Ray's directory changing so our relative paths work
+    '''
     os.chdir(
         pathlib.Path(__file__).parent.resolve())
 
@@ -246,6 +250,29 @@ def ray_tune_trainable(config, checkpoint_dir=None):
         tune.utils.wait_for_gpu(target_util=1-(1/config.pop('num_workers')))
     train.main(config_dict=master_config,
                config_override=repetition_override)
+    '''
+    os.chdir(pathlib.Path(__file__).parent.resolve())
+
+    momentum = config['momentum']
+    transformed_momentum = (-np.log((1 / momentum) - 1)).item()
+
+    repetition_override = {
+        '_ray_tune_config': True,
+        'config_dicts': {
+            'network_weight': {
+                'lr': config['lr'],
+                'weight_decay': config['weight_decay'],
+                'momentum': transformed_momentum}}}
+    if checkpoint_dir:
+        repetition_override['load_state'] = os.path.join(checkpoint_dir, 'checkpoint.pt')
+
+    master_config = copy.deepcopy(config['master_config'])
+    
+    # Remove this line:
+    # if config['num_workers'] > 1:
+    #     tune.utils.wait_for_gpu(target_util=1-(1/config.pop('num_workers')))
+    
+    train.main(config_dict=master_config, config_override=repetition_override)
 
 
 def replicate_initialisations(root_directory):
@@ -416,16 +443,32 @@ if __name__ == '__main__':
     #                 num_repetitions=200)
 
     __file__ = os.path.abspath("parallel_exec.py")
+
+    #assert to.cuda.is_available(), "CUDA not available!"
+    '''
+    # Workaround for Ray for windows
+    os.environ["PYTHONWARNINGS"] = "ignore::DeprecationWarning"  # Suppress warnings
+    ray.init(num_gpus=1, local_mode=True)
+    '''
+    #to.cuda.empty_cache() 
+    ray.init(num_gpus=1)
+
     ray_tune_run_pbt(
-        num_workers=1,
-        num_repetitions=5,
-        name="fashion_mnist_pbt",
-        local_dir="./ray_results"
+        num_workers=2,
+        num_repetitions=2,
+        name="fashion_mnist_pbt",  
+        local_dir="./ray_results"  
     )
+
 
     ray_tune_run_asha(
         num_workers=1,
-        num_repetitions=5,
-        name="fashion_mnist_asha",
-        local_dir="./ray_results"
+        num_repetitions=2,
+        name="fashion_mnist_asha",  
+        local_dir="./ray_results"  
     )
+    
+   
+
+    
+    

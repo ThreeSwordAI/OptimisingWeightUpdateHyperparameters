@@ -1,0 +1,18 @@
+Failure # 1 (occurred at 2025-01-24_11-19-04)
+[36mray::ImplicitFunc.train()[39m (pid=310854, ip=10.12.92.124, actor_id=7d5cee7697d658d1ded1c01f01000000, repr=ray_tune_trainable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scs_deal_learning/users/mchowdhu/OptimisingWeightUpdateHyperparameters/envOWHP/lib/python3.11/site-packages/ray/tune/trainable/trainable.py", line 375, in train
+    raise skipped from exception_cause(skipped)
+  File "/home/scs_deal_learning/users/mchowdhu/OptimisingWeightUpdateHyperparameters/envOWHP/lib/python3.11/site-packages/ray/tune/trainable/function_trainable.py", line 349, in entrypoint
+    return self._trainable_func(
+           ^^^^^^^^^^^^^^^^^^^^^
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scs_deal_learning/users/mchowdhu/OptimisingWeightUpdateHyperparameters/envOWHP/lib/python3.11/site-packages/ray/tune/trainable/function_trainable.py", line 666, in _trainable_func
+    output = fn()
+             ^^^^
+  File "/home/scs_deal_learning/users/mchowdhu/OptimisingWeightUpdateHyperparameters/parallel_exec.py", line 246, in ray_tune_trainable
+    tune.utils.wait_for_gpu(target_util=1-(1/config.pop('num_workers')))
+  File "/home/scs_deal_learning/users/mchowdhu/OptimisingWeightUpdateHyperparameters/envOWHP/lib/python3.11/site-packages/ray/tune/utils/util.py", line 607, in wait_for_gpu
+    raise RuntimeError("GPUtil must be installed if calling `wait_for_gpu`.")
+RuntimeError: GPUtil must be installed if calling `wait_for_gpu`.

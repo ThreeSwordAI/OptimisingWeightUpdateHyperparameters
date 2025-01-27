@@ -1,0 +1,38 @@
+[ERROR 2025-01-24 10:07:24,398] function_runner.py: 268  Runner Thread raised error.
+Traceback (most recent call last):
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 262, in run
+    self._entrypoint()
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 330, in entrypoint
+    return self._trainable_func(self.config, self._status_reporter,
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\util\tracing\tracing_helper.py", line 451, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 599, in _trainable_func
+    output = fn()
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\parallel_exec.py", line 247, in ray_tune_trainable
+    train.main(config_dict=master_config,
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\train.py", line 856, in main
+    learner = Learner(tensorboard_tracker=tracker,
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\train.py", line 97, in __init__
+    self.config_dicts['model']['class'])(
+KeyError: 'model'
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "C:\Users\USER\AppData\Local\Programs\Python\Python39\lib\threading.py", line 950, in _bootstrap_inner
+    self.run()
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 281, in run
+    raise e
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 262, in run
+    self._entrypoint()
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 330, in entrypoint
+    return self._trainable_func(self.config, self._status_reporter,
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\util\tracing\tracing_helper.py", line 451, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\envOWUH\lib\site-packages\ray\tune\function_runner.py", line 599, in _trainable_func
+    output = fn()
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\parallel_exec.py", line 247, in ray_tune_trainable
+    train.main(config_dict=master_config,
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\train.py", line 856, in main
+    learner = Learner(tensorboard_tracker=tracker,
+  File "F:\Fraunhofer\Mini AutoML Project\SOTA\Optimising Weight Update Hyperparameters\OptimisingWeightUpdateHyperparameters\train.py", line 97, in __init__
+    self.config_dicts['model']['class'])(
+KeyError: 'model'
