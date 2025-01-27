@@ -1,5 +1,5 @@
 import multiprocessing
-
+import os
 import copy
 import numpy as np
 import torch as to
@@ -403,7 +403,7 @@ def fix_missing_hyperparameter_clipping(root_directory):
 if __name__ == '__main__':
     # Python <=3.8 uses a relative __file__; force it to be absolute
     #__file__ = os.path.abspath(__file__)
-    __file__ = os.path.abspath("parallel_exec.py")
+    #__file__ = os.path.abspath("parallel_exec.py")
     # run_parallel(num_workers=8,
     #              num_repetitions=200,
     #              override_generator=natural_sgd_generator,
@@ -413,5 +413,22 @@ if __name__ == '__main__':
     # import signal
     # import pdb
     # signal.signal(signal.SIGUSR1, lambda *_: pdb.set_trace())
-    ray_tune_run_pbt(num_workers=8,
-                     num_repetitions=200)
+    #ray_tune_run_pbt(num_workers=8,
+    #                 num_repetitions=200)
+    __file__ = os.path.abspath("parallel_exec.py")
+
+
+    ray_tune_run_pbt(
+        num_workers=2,
+        num_repetitions=2,
+        name="fashion_mnist_pbt",  
+        local_dir="./ray_results"  
+    )
+
+
+    ray_tune_run_asha(
+        num_workers=1,
+        num_repetitions=2,
+        name="fashion_mnist_asha",  
+        local_dir="./ray_results"  
+    )
