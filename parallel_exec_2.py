@@ -13,6 +13,7 @@ import ray #I added
 
 import bayesopt
 import config
+from config import load_config
 import figures
 import train
 import util
@@ -161,8 +162,8 @@ def ray_tune_run_pbt(name, local_dir="./ray_results"):
             'momentum': tune.uniform(0, 1)},
         custom_explore_fn=clip_momentum)
 
-    master_config = config.load_config()
-
+    #master_config = config.load_config()
+    master_config = load_config()
     tune.run(
         ray_tune_trainable,
         name=f"PBT_{name}",
@@ -188,8 +189,8 @@ def ray_tune_run_asha(name, local_dir="./ray_results"):
         grace_period=1,
     )
 
-    master_config = config.load_config()
-
+    #master_config = config.load_config()
+    master_config = load_config()
     tune.run(
         ray_tune_trainable,
         name=f"ASHA_{name}",
@@ -217,6 +218,13 @@ def ray_tune_trainable(config, checkpoint_dir=None):
     momentum = config["momentum"]
     transformed_momentum = -np.log((1 / momentum) - 1)
 
+    # Debug: Check the passed configuration
+    print("Config passed to ray_tune_trainable:", config)
+
+    # Use the updated load_config()
+    master_config = load_config()
+    master_config.setdefault('model', {'class': 'DefaultModelClass', 'params': {}})
+
     repetition_override = {
         "_ray_tune_config": True,
         "config_dicts": {
@@ -230,8 +238,8 @@ def ray_tune_trainable(config, checkpoint_dir=None):
     if checkpoint_dir:
         repetition_override["load_state"] = os.path.join(checkpoint_dir, "checkpoint.pt")
 
-    master_config = config["master_config"]
     train.main(config_dict=master_config, config_override=repetition_override)
+
 
 
 
@@ -393,4 +401,4 @@ if __name__ == '__main__':
     ray_tune_run_pbt(name="single_gpu_pbt")
 
     # Run ASHA Scheduler
-    ray_tune_run_asha(name="single_gpu_asha")
+    #ray_tune_run_asha(name="single_gpu_asha")

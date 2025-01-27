@@ -173,6 +173,10 @@ def load_config():
                type=str,
                help='run name')
     args = parser.parse_args()
+    #args, unknown = parser.parse_known_args()
+    #if unknown:
+    #    print(f"Ignored unknown arguments: {unknown}")
+
 
     config_dict = dict(args._get_kwargs())
     config_dict.pop('config')

@@ -46,8 +46,8 @@ class Learner():
                  full_batch_validation_evaluations,
                  reset_loop_before_hyperparameter_step,
                  process_id=0,
-                 _ray_tune_config=False):
-
+                 _ray_tune_config=False): #I added model
+        #self.model = model #adding for parallel
         self.config_dicts = config_dicts
         self.device = device
         self.batch_size = batch_size
@@ -92,6 +92,9 @@ class Learner():
         self.tracker = tensorboard_tracker
         self.process_id = process_id
         self._ray_tune_config = _ray_tune_config
+        if 'model' not in self.config_dicts:
+            raise KeyError("'model' configuration is missing. Ensure the 'model' key is present in your configuration.")
+        
 
         self.model = getattr(models,
                              self.config_dicts['model']['class'])(
@@ -602,7 +605,8 @@ class Learner():
                                 # self.unnormalised_losses
                                 tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
                                             test_loss=new_test_loss.item(),
-                                            unnormalised_test_loss=self.unnormalised_losses['Test'].item())
+                                            #unnormalised_test_loss=self.unnormalised_losses['Test'].item())
+                                            unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
                             if (self.network_weight_steps - self.network_weight_step - 1
                                     == self.reset_loop_before_hyperparameter_step):
                                 continue_inner_loop = True
@@ -672,7 +676,8 @@ class Learner():
                         # self.unnormalised_losses
                         tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
                                     test_loss=new_test_loss.item(),
-                                    unnormalised_test_loss=self.unnormalised_losses['Test'].item())
+                                    #unnormalised_test_loss=self.unnormalised_losses['Test'].item())
+                                    unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
                 self.postprocess_hyperparameters()
 
             # Final loss evaluation for completeness of logs
@@ -853,9 +858,17 @@ def main(config_dict=None, config_override={}):
         if not os.path.exists(weights_path):
             os.mkdir(weights_path)
 
+        #learner = Learner(tensorboard_tracker=tracker,
+        #                  process_id=process_id,
+        #                  **config_dict)
+        print("Config dict passed to Learner:", config_dict)
+        #if "model" in config_dict:
+        #    del config_dict["model"]
+
         learner = Learner(tensorboard_tracker=tracker,
-                          process_id=process_id,
-                          **config_dict)
+                  process_id=process_id,
+                  **config_dict)
+
         if load_state:
             learner.load_training_state(load_state)
         learner.train()
@@ -869,7 +882,7 @@ def main(config_dict=None, config_override={}):
 
 
 # Python <=3.8 uses a relative __file__; force it to be absolute
-#Here I am using python 3.9 
+# Here I am using python 3.9 
 __file__ = os.path.abspath(__file__)
 if __name__ == '__main__':
     main()

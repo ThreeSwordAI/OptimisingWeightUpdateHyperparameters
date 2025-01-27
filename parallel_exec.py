@@ -461,12 +461,12 @@ if __name__ == '__main__':
     )
 
 
-    ray_tune_run_asha(
-        num_workers=1,
-        num_repetitions=2,
-        name="fashion_mnist_asha",  
-        local_dir="./ray_results"  
-    )
+    #ray_tune_run_asha(
+    #    num_workers=1,
+    #    num_repetitions=2,
+    #    name="fashion_mnist_asha",  
+    #    local_dir="./ray_results"  
+    #)
     
    
 
