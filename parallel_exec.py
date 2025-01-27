@@ -160,7 +160,8 @@ def ray_tune_run_pbt(num_workers,
 
     scheduler = tune.schedulers.PopulationBasedTraining(
         time_attr="training_iteration",
-        perturbation_interval=100,
+        #perturbation_interval=100,
+        perturbation_interval=20,
         hyperparam_mutations={
             'lr': tune.uniform(-6, -1),
             'weight_decay': tune.uniform(-7, -2),
@@ -175,7 +176,8 @@ def ray_tune_run_pbt(num_workers,
         scheduler=scheduler,
         metric='validation_loss',
         mode='min',
-        stop={'training_iteration': 400*10},
+        #stop={'training_iteration': 400*10},
+        stop={'training_iteration': 20},
         # stop=lambda trial_id, result: not np.isfinite(result['validation_loss']),
         checkpoint_score_attr='min-validation_loss',
         num_samples=num_repetitions,
@@ -198,7 +200,8 @@ def ray_tune_run_asha(num_workers,
 
     scheduler = tune.schedulers.ASHAScheduler(
         time_attr='training_iteration',
-        max_t=400*10,
+        #max_t=400*10,
+        max_t = 20,
     )
 
     master_config = config.load_config()
