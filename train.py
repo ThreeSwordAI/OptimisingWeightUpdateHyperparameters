@@ -603,10 +603,14 @@ class Learner():
                                         test_batch, "Test")
                                 # self._compute_loss() also updates
                                 # self.unnormalised_losses
-                                tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
-                                            test_loss=new_test_loss.item(),
+
+                                #tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
+                                #            test_loss=new_test_loss.item(),
                                             #unnormalised_test_loss=self.unnormalised_losses['Test'].item())
-                                            unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
+                                #            unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
+                                tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
+                                               test_loss=new_test_loss.item())
+                                            #unnormalised_test_loss=self.unnormalised_losses['Test'].item())
                             if (self.network_weight_steps - self.network_weight_step - 1
                                     == self.reset_loop_before_hyperparameter_step):
                                 continue_inner_loop = True
@@ -668,16 +672,33 @@ class Learner():
                             # new_validation_loss if we already did above,
                             # because this one is a constant overhead for
                             # all Ray configurations
+
+                            #print("Validation batch:", validation_batch)
+                            #print("Test batch:", test_batch)
+
+
                             new_validation_loss = self._compute_loss(
                                 validation_batch, "Validation")
                             new_test_loss = self._compute_loss(
                                 test_batch, "Test")
+                            
+                            #print("Validation Loss:", new_validation_loss)
+                            #print("Test Loss:", new_test_loss)
                         # self._compute_loss() also updates
                         # self.unnormalised_losses
-                        tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
-                                    test_loss=new_test_loss.item(),
+                        #tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
+                        #            test_loss=new_test_loss.item(),
                                     #unnormalised_test_loss=self.unnormalised_losses['Test'].item())
-                                    unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
+                        #            unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
+                        #print(f"Validation Batch: {validation_batch}")
+                        #print(f"Test Batch: {test_batch}")
+                        #print(f"Validation Loss: {new_validation_loss}")
+                        #print(f"Test Loss: {new_test_loss}")
+                        #print(f"Unnormalised Losses: {self.unnormalised_losses}")
+                        tune.report(validation_loss=new_validation_loss.item() if not to.isnan(new_validation_loss) else float('inf'),
+                                    test_loss=new_test_loss.item())
+                                    #unnormalised_test_loss=self.unnormalised_losses['Test'].item())
+                        #            unnormalised_test_loss=self.unnormalised_losses.get('Test', to.tensor(float('inf'))).item())
                 self.postprocess_hyperparameters()
 
             # Final loss evaluation for completeness of logs
@@ -861,7 +882,7 @@ def main(config_dict=None, config_override={}):
         #learner = Learner(tensorboard_tracker=tracker,
         #                  process_id=process_id,
         #                  **config_dict)
-        print("Config dict passed to Learner:", config_dict)
+        #print("Config dict passed to Learner:", config_dict)
         #if "model" in config_dict:
         #    del config_dict["model"]
 

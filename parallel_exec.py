@@ -161,7 +161,7 @@ def ray_tune_run_pbt(num_workers,
     scheduler = tune.schedulers.PopulationBasedTraining(
         time_attr="training_iteration",
         #perturbation_interval=100,
-        perturbation_interval=20,
+        perturbation_interval=100, #Before it, I run for 20
         hyperparam_mutations={
             'lr': tune.uniform(-6, -1),
             'weight_decay': tune.uniform(-7, -2),
@@ -177,12 +177,12 @@ def ray_tune_run_pbt(num_workers,
         metric='validation_loss',
         mode='min',
         #stop={'training_iteration': 400*10},
-        stop={'training_iteration': 20},
+        stop={'training_iteration': 400*10}, #Before it, I run for 20
         # stop=lambda trial_id, result: not np.isfinite(result['validation_loss']),
         checkpoint_score_attr='min-validation_loss',
         num_samples=num_repetitions,
         #resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
-        resources_per_trial={'cpu': 1, 'gpu': 1}, #I added
+        resources_per_trial={'cpu': 7, 'gpu': 1}, #I added
         local_dir=local_dir,
         config={'master_config': master_config,
                 'num_workers': num_workers},
@@ -200,8 +200,8 @@ def ray_tune_run_asha(num_workers,
 
     scheduler = tune.schedulers.ASHAScheduler(
         time_attr='training_iteration',
-        #max_t=400*10,
-        max_t = 20,
+        max_t=400*10,
+        #max_t = 20, #my line
     )
 
     master_config = config.load_config()
@@ -215,7 +215,7 @@ def ray_tune_run_asha(num_workers,
         stop=lambda trial_id, result: not np.isfinite(result['validation_loss']),
         num_samples=num_repetitions,
         #resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
-        resources_per_trial={'cpu': 1, 'gpu': 1}, #I added
+        resources_per_trial={'cpu': 7, 'gpu': 1}, #I added
         local_dir=local_dir,
         config={'master_config': master_config,
                 'num_workers': num_workers,
@@ -457,8 +457,8 @@ if __name__ == '__main__':
     ray.init(num_gpus=1)
 
     ray_tune_run_pbt(
-        num_workers=2,
-        num_repetitions=2,
+        num_workers=8,
+        num_repetitions=200,
         name="fashion_mnist_pbt",  
         local_dir="./ray_results"  
     )
