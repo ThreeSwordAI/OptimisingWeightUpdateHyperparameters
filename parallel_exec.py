@@ -10,6 +10,7 @@ import sys
 import tqdm
 import ray.tune as tune
 import ray #I added
+import sys
 
 import bayesopt
 import config
@@ -170,6 +171,9 @@ def ray_tune_run_pbt(num_workers,
 
     master_config = config.load_config()
 
+    sys.stdout.flush() # I did
+    sys.stderr.flush() # I did
+
     tune.run(
         ray_tune_trainable,
         name=f"PBT {name}",
@@ -182,11 +186,12 @@ def ray_tune_run_pbt(num_workers,
         checkpoint_score_attr='min-validation_loss',
         num_samples=num_repetitions,
         #resources_per_trial={'cpu': 1, 'gpu': 1/num_workers},
-        resources_per_trial={'cpu': 7, 'gpu': 1}, #I added
+        resources_per_trial={'cpu': 1, 'gpu': 0.125}, #I added
         local_dir=local_dir,
         config={'master_config': master_config,
                 'num_workers': num_workers},
-        log_to_file=True,
+        #log_to_file=True,
+        log_to_file=("stdout.log", "stderr.log"),
     )
 
 
